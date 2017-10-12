@@ -1,0 +1,11 @@
+<aura:component implements="flexipage:availableForAllPageTypes">
+	<aura:attribute name="runsheet" type="FM_Run_Sheet__c" access="global"/>
+
+	<div class="slds-box">
+		<aura:if isTrue="{!v.route == null}">
+			<aura:set attribute="else">
+				
+			</aura:set>
+		</aura:if>
+	</div>
+</aura:component>

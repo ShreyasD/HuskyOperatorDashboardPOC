@@ -1,0 +1,83 @@
+<aura:component implements="flexipage:availableForAllPageTypes" controller="FM_RunsheetLtngController" access="global">
+
+	<aura:attribute name="currentDate" type="Date" />
+	<aura:attribute name="routeOptions" type="List" />
+    <aura:attribute name="routeSelectedId" type="String"/>
+    <aura:attribute name="routeSelectedName" type="String"/>
+    <aura:attribute name="isRouteSelected" type="Boolean"/>
+    <aura:attribute name="runsheetData" type="List"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="aura:waiting" action="{!c.toggleSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.toggleSpinner}"/>
+
+    <div class="slds-box">
+    	<!-- <div class="slds-is-relative">
+    		<lightning:spinner aura:id="loadingSpinner" class="slds-hide"/>
+    	</div> -->
+
+    	<!--Title-->
+		<div class="slds-page-header">
+		  <div class="slds-media">
+		    <div class="slds-media__figure">
+		      <lightning:icon iconName="standard:opportunity" size="large" alternativeText="Runsheet"/>
+		    </div>
+		    <div class="slds-media__body">
+		      <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="Runsheet">Runsheet</h1>
+		      <p class="slds-text-body_small slds-line-height_reset">{!v.routeSelectedName} • {!v.currentDate}</p>
+		    </div>
+		  </div>
+		</div>
+		<br/>
+	    
+	    <!-- Route Selection -->
+	    <lightning:select label="Operator Route" name="routeSelect" aura:id="routeSelect" value="{!v.routeSelectedId}" onchange="{!c.handleRouteChange}">
+	        <aura:iteration items="{!v.routeOptions}" var="item">
+	            <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+	        </aura:iteration>
+	    </lightning:select>
+	    <br/>
+
+	    <!-- Runsheet Table -->
+	    <aura:if isTrue="{!v.isRouteSelected}">
+		    <c:FM_RunsheetEntryForm route="{!v.routeSelectedId}"/>
+		    <br/>
+
+	        <table class="slds-table slds-table--bordered slds-table--striped slds-table--cell-buffer slds-table--fixed-layout">
+			    <thead>
+			      <tr class="slds-text-heading--label">
+			        <th scope="col"><div class="slds-truncate" title="ID">Location</div></th>
+			        <th scope="col"><div class="slds-truncate" title="Name">Flow Rate</div></th>
+			        <th scope="col"><div class="slds-truncate" title="Type">Flowline Volume</div></th>
+			        <th scope="col"><div class="slds-truncate" title="H2S">H2S</div></th>
+			        <th scope="col"><div class="slds-truncate" title="H2S">Unit Configuration</div></th>
+			        <th scope="col"><div class="slds-truncate" title="H2S">Tonight Oil</div></th>
+			        <th scope="col"><div class="slds-truncate" title="H2S">Tonight Water</div></th>
+			        <th scope="col"><div class="slds-truncate" title="H2S">Tomorrow Oil</div></th>
+			        <th scope="col"><div class="slds-truncate" title="H2S">Tomorrow Water</div></th>
+			      </tr>
+			    </thead>
+			    <tbody>
+			      <!-- Use the Apex model and controller to fetch server side data -->
+			      <aura:iteration items="{!v.runsheetData}" var="runsheet">
+			        <tr>
+			          <th scope="row"><div class="slds-truncate" title="{!runsheet.Well__r.Name}">{!runsheet.Well__r.Name}</div></th>
+			          <td><div class="slds-truncate" title="{!runsheet.Act_Flow_Rate__c}">{!runsheet.Act_Flow_Rate__c}</div></td>
+			          <td><div class="slds-truncate" title="{!runsheet.Flowline_Volume__c}">{!runsheet.Flowline_Volume__c}</div></td>
+			          <td><div class="slds-truncate" title="{!runsheet.Sour__c}"><ui:outputCheckbox value="{!runsheet.Sour__c}"/></div></td>
+			          <td><div class="slds-truncate" title="{!runsheet.Flowline_Volume__c}">{!runsheet.RM_County__c}</div></td>
+			          <td><div class="slds-truncate" title="{!runsheet.Flowline_Volume__c}">{!runsheet.Unit_Configuration__c}</div></td>
+			          <td><div class="slds-truncate" title="{!runsheet.Flowline_Volume__c}">{!runsheet.Tonight_Oil__c}</div></td>
+			          <td><div class="slds-truncate" title="{!runsheet.Flowline_Volume__c}">{!runsheet.Tonight_Water__c}</div></td>
+			          <td><div class="slds-truncate" title="{!runsheet.Flowline_Volume__c}">{!runsheet.Tomorrow_Oil__c}</div></td>
+			          <td><div class="slds-truncate" title="{!runsheet.Flowline_Volume__c}">{!runsheet.Tomorrow_Water__c}</div></td>
+			        </tr>
+			      </aura:iteration>
+			    </tbody>
+			</table>
+
+			<br/>
+		</aura:if>
+	</div>
+
+</aura:component>
